@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean class="evgn.dev.messaging.service.impl.DialogLocalServiceImpl" id="evgn.dev.messaging.service.DialogLocalService" />
+	<bean class="evgn.dev.messaging.service.persistence.impl.DialogPersistenceImpl" id="evgn.dev.messaging.service.persistence.DialogPersistence" parent="basePersistence" />
+	<bean class="evgn.dev.messaging.service.impl.DialogMemberLocalServiceImpl" id="evgn.dev.messaging.service.DialogMemberLocalService" />
+	<bean class="evgn.dev.messaging.service.persistence.impl.DialogMemberPersistenceImpl" id="evgn.dev.messaging.service.persistence.DialogMemberPersistence" parent="basePersistence" />
+	<bean class="evgn.dev.messaging.service.impl.DialogMessageLocalServiceImpl" id="evgn.dev.messaging.service.DialogMessageLocalService" />
+	<bean class="evgn.dev.messaging.service.persistence.impl.DialogMessagePersistenceImpl" id="evgn.dev.messaging.service.persistence.DialogMessagePersistence" parent="basePersistence" />
+</beans>

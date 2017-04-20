@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false" default-lazy="false">
+	<import class="evgn.dev.messaging.model.Dialog" />
+	<import class="evgn.dev.messaging.model.DialogMember" />
+	<import class="evgn.dev.messaging.model.DialogMessage" />
+	<class name="evgn.dev.messaging.model.impl.DialogImpl" table="dmsg_Dialog">
+		<id name="dialogId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="topic" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="creatorMemberId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="lastMessageDate" type="org.hibernate.type.TimestampType" />
+		<property name="lastMessageId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="creatorUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="evgn.dev.messaging.model.impl.DialogMemberImpl" table="dmsg_DialogMember">
+		<id name="dialogMemberId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="dialogId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="memberId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="memberType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="evgn.dev.messaging.model.impl.DialogMessageImpl" table="dmsg_DialogMessage">
+		<id name="messageId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="dialogId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property column="text_" name="text" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="dialogMemberId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+	</class>
+</hibernate-mapping>

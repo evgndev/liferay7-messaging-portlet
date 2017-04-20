@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_0_0.dtd">
+
+<service-builder package-path="evgn.dev.messaging">
+	<namespace>dmsg</namespace>
+
+	<!--Dialog-->
+	<entity name="Dialog" local-service="true" remote-service="false">
+
+		<!-- PK field -->
+		<column name="dialogId" type="long" primary="true"/>
+
+		<column name="topic" type="String"/>
+
+		<!-- sender of first message-->
+		<!-- dialogMemberId of dialog sender -->
+		<column name="creatorMemberId" type="long"/>
+
+		<column name="lastMessageDate" type="Date"/>
+		<column name="lastMessageId" type="long"/>
+
+		<column name="createDate" type="Date"/>
+		<column name="creatorUserId" type="long"/>
+                		
+		<order by="desc">
+			<order-column name="lastMessageDate"/>
+		</order>
+	</entity>
+
+	<!-- Link dialog member with dialog -->
+	<entity name="DialogMember"  local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+		<column name="dialogMemberId" type="long" primary="true"/>
+
+		<!-- main -->
+		<column name="dialogId" type="long"/>
+
+		<!--by default is userId -->
+		<column name="memberId" type="long"/>
+		<!--by default is user -->
+		<column name="memberType" type="String"/>
+
+		<!-- Finder methods -->
+		<finder name="Dialog" return-type="Collection">
+			<finder-column name="dialogId" />
+		</finder>
+		<finder name="Member" return-type="Collection">
+			<finder-column name="memberId" />
+			<finder-column name="memberType" />
+		</finder>
+		<finder name="DialogAndMember" return-type="DialogMember" unique="true">
+			<finder-column name="dialogId" />
+			<finder-column name="memberId" />
+			<finder-column name="memberType" />
+		</finder>
+	</entity>
+
+	<!--Message-->
+	<entity name="DialogMessage"  local-service="true" remote-service="false">
+
+		<!-- PK field -->
+		<column name="messageId" type="long" primary="true"/>
+
+		<column name="dialogId" type="long"/>
+
+		<column name="text" type="String"/>
+
+		<!--now are the same-->
+		<column name="dialogMemberId" type="long"/>
+		<column name="userId" type="long"/>
+
+		<column name="createDate" type="Date"/>
+
+		<order by="asc">
+			<order-column name="createDate"/>
+		</order>
+
+		<finder name="Dialog" return-type="Collection">
+			<finder-column name="dialogId" />
+		</finder>
+	</entity>
+</service-builder>

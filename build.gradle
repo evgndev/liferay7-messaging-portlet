@@ -1,0 +1,35 @@
+buildscript {
+	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins", version: "3.1.3"
+	}
+
+	repositories {
+		mavenLocal()
+
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+subprojects {
+	apply plugin: "com.liferay.plugin"
+
+	repositories {
+		mavenLocal()
+
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+task deployApi(type: Copy){
+	    from(file('messaging-portlet-api/build/libs/evgn.dev.messaging.api-1.0.0.jar'))
+	    into('/home/eugene/liferay7/liferay-7.0-ga3/deploy')
+}
+
+task deployService(type: Copy){
+	from(file('messaging-portlet-service/build/libs/evgn.dev.messaging.service-1.0.0.jar'))
+	into('/home/eugene/liferay7/liferay-7.0-ga3/deploy')
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="evgn.dev.messaging.model.Dialog">
+		<field name="dialogId" type="long" />
+		<field name="topic" type="String" />
+		<field name="creatorMemberId" type="long" />
+		<field name="lastMessageDate" type="Date" />
+		<field name="lastMessageId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="creatorUserId" type="long" />
+	</model>
+	<model name="evgn.dev.messaging.model.DialogMember">
+		<field name="dialogMemberId" type="long" />
+		<field name="dialogId" type="long" />
+		<field name="memberId" type="long" />
+		<field name="memberType" type="String" />
+	</model>
+	<model name="evgn.dev.messaging.model.DialogMessage">
+		<field name="messageId" type="long" />
+		<field name="dialogId" type="long" />
+		<field name="text" type="String" />
+		<field name="dialogMemberId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+	</model>
+</model-hints>

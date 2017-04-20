@@ -1,0 +1,12 @@
+Bundle-Name: messaging-portlet-api
+Bundle-SymbolicName: evgn.dev.messaging.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	evgn.dev.messaging.exception,\
+	evgn.dev.messaging.model,\
+	evgn.dev.messaging.service,\
+	evgn.dev.messaging.service.persistence,\
+    com.sun.org.apache.xpath.internal.operations,\
+    com.google.*
+
+-includeresource: META-INF/service.xml=../messaging-portlet-service/service.xml
