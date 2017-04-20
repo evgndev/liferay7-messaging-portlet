@@ -15,16 +15,18 @@
 package evgn.dev.messaging.service.impl;
 
 import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.model.User;
+import evgn.dev.messaging.model.Dialog;
 import evgn.dev.messaging.model.DialogMember;
 import evgn.dev.messaging.service.DialogMemberLocalServiceUtil;
 import evgn.dev.messaging.service.base.DialogLocalServiceBaseImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The implementation of the dialog local service.
@@ -50,33 +52,30 @@ public class DialogLocalServiceImpl extends DialogLocalServiceBaseImpl {
 	 */
     private static Log LOG = LogFactoryUtil.getLog(DialogLocalServiceImpl.class.getName());
 
-    /**
-     * @return id of organizations which is member of this dialog
-     */
-    public List<Object> getDialogMembers(long dialogId) {
-        List<Object> members = new ArrayList<>();
+
+    public List<Dialog> getUserDialogs(User user) {
+        List<Dialog> dialogs = new ArrayList<>();
+        String userScreenName = "null";
+
         try {
-            List<DialogMember> dialogMembers = DialogMemberLocalServiceUtil.getByDialog(dialogId);
-            for (DialogMember dialogMember : dialogMembers) {
-                Object member = getMember(dialogMember);
-                if (member != null) {
-                    members.add(member);
+            userScreenName = user.getScreenName();
+            List<DialogMember> members = DialogMemberLocalServiceUtil.getByUser(user.getUserId());
+            Set<Long> dialogIds = new HashSet<>();
+            for (DialogMember dialogMember : members) {
+                dialogIds.add(dialogMember.getDialogId());
+            }
+            for (Long dialogId : dialogIds) {
+                Dialog dialog = dialogPersistence.fetchByPrimaryKey(dialogId);
+                if (dialog != null) {
+                    dialogs.add(dialog);
+                } else {
+                    LOG.warn("Cannot get dialog by id " + dialogId);
                 }
             }
-        } catch (Exception e) {
-            LOG.error("Cannot get members", e);
-        }
-        return members;
-    }
 
-    public Object getMember(DialogMember dialogMember) throws Exception {
-        Object member = null;
-        String memberType = dialogMember.getMemberType();
-        if (memberType.equalsIgnoreCase("user")) {
-             member = UserLocalServiceUtil.getUser(dialogMember.getMemberId());
-        } else {
-            LOG.error("Wrong member type " + memberType);
+        } catch (Exception e) {
+            LOG.error("Cannot get dialogs for user " + userScreenName, e);
         }
-        return member;
+        return dialogs;
     }
 }

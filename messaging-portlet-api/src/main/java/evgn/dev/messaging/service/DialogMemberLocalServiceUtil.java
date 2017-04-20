@@ -169,6 +169,12 @@ public class DialogMemberLocalServiceUtil {
 		return getService().getDialogMembersCount();
 	}
 
+	public static java.lang.Object getMember(
+		evgn.dev.messaging.model.DialogMember dialogMember)
+		throws java.lang.Exception {
+		return getService().getMember(dialogMember);
+	}
+
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -237,6 +243,14 @@ public class DialogMemberLocalServiceUtil {
 	}
 
 	/**
+	* @return empty in error case
+	*/
+	public static java.util.List<evgn.dev.messaging.model.DialogMember> getByUser(
+		long userId) {
+		return getService().getByUser(userId);
+	}
+
+	/**
 	* Returns a range of all the dialog members.
 	*
 	* <p>
@@ -250,6 +264,14 @@ public class DialogMemberLocalServiceUtil {
 	public static java.util.List<evgn.dev.messaging.model.DialogMember> getDialogMembers(
 		int start, int end) {
 		return getService().getDialogMembers(start, end);
+	}
+
+	/**
+	* @return id of organizations which is member of this dialog
+	*/
+	public static java.util.List<java.lang.Object> getMembersByDialod(
+		long dialogId) {
+		return getService().getMembersByDialod(dialogId);
 	}
 
 	/**

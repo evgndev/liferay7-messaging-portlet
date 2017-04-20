@@ -159,6 +159,10 @@ public interface DialogMemberLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getDialogMembersCount();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.Object getMember(DialogMember dialogMember)
+		throws java.lang.Exception;
+
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -212,6 +216,12 @@ public interface DialogMemberLocalService extends BaseLocalService,
 	public List<DialogMember> getByDialog(long dialogId);
 
 	/**
+	* @return empty in error case
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<DialogMember> getByUser(long userId);
+
+	/**
 	* Returns a range of all the dialog members.
 	*
 	* <p>
@@ -224,6 +234,12 @@ public interface DialogMemberLocalService extends BaseLocalService,
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<DialogMember> getDialogMembers(int start, int end);
+
+	/**
+	* @return id of organizations which is member of this dialog
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<java.lang.Object> getMembersByDialod(long dialogId);
 
 	/**
 	* Returns the number of rows matching the dynamic query.

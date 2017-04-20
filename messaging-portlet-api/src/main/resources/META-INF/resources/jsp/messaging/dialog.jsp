@@ -10,7 +10,7 @@
 
 <%
     long dialogId = ParamUtil.getLong(request, MessagingPortlet.DIALOG_ID);
-    Dialog dialog = DialogLocalServiceUtil.fetchDialog(dialogId);
+    Dialog dialog = DialogLocalServiceUtil.(dialogId);
     String topic = dialog.getTopic();
 
     PortletURL backURL = renderResponse.createRenderURL();

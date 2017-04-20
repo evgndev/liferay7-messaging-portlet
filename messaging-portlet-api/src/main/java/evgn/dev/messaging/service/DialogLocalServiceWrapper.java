@@ -152,13 +152,6 @@ public class DialogLocalServiceWrapper implements DialogLocalService,
 		return _dialogLocalService.getDialogsCount();
 	}
 
-	@Override
-	public java.lang.Object getMember(
-		evgn.dev.messaging.model.DialogMember dialogMember)
-		throws java.lang.Exception {
-		return _dialogLocalService.getMember(dialogMember);
-	}
-
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -223,14 +216,6 @@ public class DialogLocalServiceWrapper implements DialogLocalService,
 	}
 
 	/**
-	* @return id of organizations which is member of this dialog
-	*/
-	@Override
-	public java.util.List<java.lang.Object> getDialogMembers(long dialogId) {
-		return _dialogLocalService.getDialogMembers(dialogId);
-	}
-
-	/**
 	* Returns a range of all the dialogs.
 	*
 	* <p>
@@ -245,6 +230,12 @@ public class DialogLocalServiceWrapper implements DialogLocalService,
 	public java.util.List<evgn.dev.messaging.model.Dialog> getDialogs(
 		int start, int end) {
 		return _dialogLocalService.getDialogs(start, end);
+	}
+
+	@Override
+	public java.util.List<evgn.dev.messaging.model.Dialog> getUserDialogs(
+		com.liferay.portal.kernel.model.User user) {
+		return _dialogLocalService.getUserDialogs(user);
 	}
 
 	/**

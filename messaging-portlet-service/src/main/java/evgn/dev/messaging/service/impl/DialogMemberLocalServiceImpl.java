@@ -21,10 +21,12 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import evgn.dev.messaging.model.DialogMember;
 import evgn.dev.messaging.service.DialogMemberLocalServiceUtil;
 import evgn.dev.messaging.service.base.DialogMemberLocalServiceBaseImpl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,6 +76,25 @@ public class DialogMemberLocalServiceImpl
     }
 
     /**
+     * @return id of organizations which is member of this dialog
+     */
+    public List<Object> getMembersByDialod(long dialogId) {
+        List<Object> members = new ArrayList<>();
+        try {
+            List<DialogMember> dialogMembers = DialogMemberLocalServiceUtil.getByDialog(dialogId);
+            for (DialogMember dialogMember : dialogMembers) {
+                Object member = getMember(dialogMember);
+                if (member != null) {
+                    members.add(member);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Cannot get members", e);
+        }
+        return members;
+    }
+
+    /**
      * @return empty in error case
      */
     public List<DialogMember> getByDialog(long dialogId) {
@@ -83,6 +104,22 @@ public class DialogMemberLocalServiceImpl
             result = dialogMemberPersistence.findByDialog(dialogId);
         } catch (Exception e) {
             LOG.error("Cannot get DialogMember by dialogId " + dialogId, e);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * @return empty in error case
+     */
+    public List<DialogMember> getByUser(long userId) {
+
+        List<DialogMember> result = Collections.emptyList();
+        try {
+            result = dialogMemberPersistence.findByMember(userId, "user");
+        } catch (Exception e) {
+            LOG.error("Cannot get DialogMember by userId " + userId, e);
         }
 
         return result;
@@ -98,5 +135,16 @@ public class DialogMemberLocalServiceImpl
         }
 
         return result;
+    }
+
+    public Object getMember(DialogMember dialogMember) throws Exception {
+        Object member = null;
+        String memberType = dialogMember.getMemberType();
+        if (memberType.equalsIgnoreCase("user")) {
+            member = UserLocalServiceUtil.getUser(dialogMember.getMemberId());
+        } else {
+            LOG.error("Wrong member type " + memberType);
+        }
+        return member;
     }
 }

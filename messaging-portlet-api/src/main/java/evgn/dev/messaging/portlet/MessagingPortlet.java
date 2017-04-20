@@ -30,8 +30,7 @@ import java.util.List;
                 "javax.portlet.init-param.template-path=/jsp/",
                 "javax.portlet.init-param.view-template=/jsp/messaging/dialogList.jsp",
                 "javax.portlet.resource-bundle=content.Language",
-                "javax.portlet.security-role-ref=power-user,user",
-                "resource.actions.configs=resource-actions/default.xml"
+                "javax.portlet.security-role-ref=power-user,user"
         },
         service = Portlet.class
 )
@@ -40,9 +39,9 @@ public class MessagingPortlet extends MVCPortlet {
     private static final Log LOG = LogFactoryUtil.getLog(MessagingPortlet.class.getName());
 
     public static final String JSP_LIST = "/jsp/messaging/dialogList.jsp";
-
     public static final String JSP_MESSAGE = "/jsp/messaging/message.jsp";
     public static final String JSP_DIALOG = "/jsp/messaging/dialog.jsp";
+
     public static final String DIALOG_ID = "dialogId";
     public static final String RECEIVER = "receiver";
     public static final String TOPIC = "dialogTopic";

@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
@@ -33,7 +34,6 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import evgn.dev.messaging.model.Dialog;
-import evgn.dev.messaging.model.DialogMember;
 
 import java.io.Serializable;
 
@@ -147,10 +147,6 @@ public interface DialogLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getDialogsCount();
 
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.Object getMember(DialogMember dialogMember)
-		throws java.lang.Exception;
-
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -198,12 +194,6 @@ public interface DialogLocalService extends BaseLocalService,
 		int end, OrderByComparator<T> orderByComparator);
 
 	/**
-	* @return id of organizations which is member of this dialog
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<java.lang.Object> getDialogMembers(long dialogId);
-
-	/**
 	* Returns a range of all the dialogs.
 	*
 	* <p>
@@ -216,6 +206,9 @@ public interface DialogLocalService extends BaseLocalService,
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Dialog> getDialogs(int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Dialog> getUserDialogs(User user);
 
 	/**
 	* Returns the number of rows matching the dynamic query.

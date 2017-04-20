@@ -2,24 +2,29 @@
 <%@ page import="evgn.dev.messaging.model.Dialog" %>
 <%@ page import="java.util.List" %>
 <%@ page import="evgn.dev.messaging.portlet.MessagingPortlet" %>
+<%@ page import="evgn.dev.messaging.service.DialogMessageLocalServiceUtil" %>
+<%@ page import="evgn.dev.messaging.model.DialogMessage" %>
+<%@ page import="com.liferay.portal.kernel.service.permission.PortletPermissionUtil" %>
 
 <%@ include file="../init.jsp" %>
 <%@ include file="../errors.jsp" %>
 
 <%
-    List<Dialog> dialogs = DialogLocalServiceUtil.getDialogs(-1, -1);
-    long dialogsCount = DialogLocalServiceUtil.getDialogsCount();
+    List<Dialog> dialogs = DialogLocalServiceUtil.getUserDialogs(user);
+    long dialogsCount = dialogs.size();
 %>
 
 <%--Create new--%>
-<div class="">
-    <liferay-portlet:renderURL var="createDialogURL">
-        <liferay-portlet:param name="<%= JSP %>" value="<%= MessagingPortlet.JSP_MESSAGE %>"/>
-    </liferay-portlet:renderURL>
-    <aui:a href="<%= createDialogURL %>">
-        <liferay-ui:message key="messaging.createDialog"/>
-    </aui:a>
-</div>
+<c:if test="<%= PortletPermissionUtil.contains(permissionChecker, portletName, "CREATE_MSG") %>">
+    <div class="">
+        <liferay-portlet:renderURL var="createDialogURL">
+            <liferay-portlet:param name="<%= JSP %>" value="<%= MessagingPortlet.JSP_MESSAGE %>"/>
+        </liferay-portlet:renderURL>
+        <aui:a href="<%= createDialogURL %>">
+            <liferay-ui:message key="messaging.createDialog"/>
+        </aui:a>
+    </div>
+</c:if>
 
 <%--Table--%>
 <liferay-ui:search-container
@@ -47,8 +52,24 @@
     >
         <liferay-ui:search-container-column-text name="">
             <div class="row">
-                <div class="col-md-10 bold-text">
-                    <%= dialog.getTopic() %>
+                <div class="col-md-10">
+                    <div class="row bold-text">
+                        <%= dialog.getTopic() %>
+                    </div>
+                    <div class="row">
+                        <%
+                            DialogMessage lastMessage = DialogMessageLocalServiceUtil
+                                    .getLastMessage(dialog.getDialogId());
+                            String lastMessageText = "";
+                            if (lastMessage != null) {
+                                lastMessageText = lastMessage.getText();
+                            }
+                            if (lastMessageText.length() > 200) {
+                                lastMessageText = lastMessageText.substring(0, 200) + "...";
+                            }
+                        %>
+                        <%= lastMessageText %>
+                    </div>
                 </div>
                 <div class="col-md-2 align-right">
                     <liferay-portlet:renderURL var="openURL">
@@ -59,7 +80,7 @@
                                                value="<%= String.valueOf(dialog.getDialogId()) %>"
                         />
                     </liferay-portlet:renderURL>
-                    <aui:button value="open" cssClass="mt5 mb5" href="<%= openURL %>"/>
+                    <aui:button value="view" cssClass="mt5 mb5" href="<%= openURL %>"/>
                 </div>
             </div>
         </liferay-ui:search-container-column-text>
