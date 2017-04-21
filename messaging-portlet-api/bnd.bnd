@@ -5,6 +5,7 @@ Export-Package:\
 	evgn.dev.messaging.exception,\
 	evgn.dev.messaging.model,\
 	evgn.dev.messaging.service,\
+	evgn.dev.messaging.util,\
 	evgn.dev.messaging.service.persistence,\
     com.sun.org.apache.xpath.internal.operations,\
     com.google.*

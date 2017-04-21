@@ -38,6 +38,7 @@ public class DialogSoap implements Serializable {
 		soapModel.setCreatorMemberId(model.getCreatorMemberId());
 		soapModel.setLastMessageDate(model.getLastMessageDate());
 		soapModel.setLastMessageId(model.getLastMessageId());
+		soapModel.setDisableAnswering(model.getDisableAnswering());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setCreatorUserId(model.getCreatorUserId());
 
@@ -132,6 +133,18 @@ public class DialogSoap implements Serializable {
 		_lastMessageId = lastMessageId;
 	}
 
+	public boolean getDisableAnswering() {
+		return _disableAnswering;
+	}
+
+	public boolean isDisableAnswering() {
+		return _disableAnswering;
+	}
+
+	public void setDisableAnswering(boolean disableAnswering) {
+		_disableAnswering = disableAnswering;
+	}
+
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -153,6 +166,7 @@ public class DialogSoap implements Serializable {
 	private long _creatorMemberId;
 	private Date _lastMessageDate;
 	private long _lastMessageId;
+	private boolean _disableAnswering;
 	private Date _createDate;
 	private long _creatorUserId;
 }

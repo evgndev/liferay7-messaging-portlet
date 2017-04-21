@@ -313,6 +313,7 @@ public class DialogPersistenceImpl extends BasePersistenceImpl<Dialog>
 		dialogImpl.setCreatorMemberId(dialog.getCreatorMemberId());
 		dialogImpl.setLastMessageDate(dialog.getLastMessageDate());
 		dialogImpl.setLastMessageId(dialog.getLastMessageId());
+		dialogImpl.setDisableAnswering(dialog.isDisableAnswering());
 		dialogImpl.setCreateDate(dialog.getCreateDate());
 		dialogImpl.setCreatorUserId(dialog.getCreatorUserId());
 

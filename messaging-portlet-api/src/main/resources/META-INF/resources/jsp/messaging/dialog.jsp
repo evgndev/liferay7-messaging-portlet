@@ -12,7 +12,6 @@
 
 <%
     long dialogId = ParamUtil.getLong(request, MessagingPortlet.DIALOG_ID);
-    LOG.info("TEST dialog from request: " + ParamUtil.getLong(request, "dialog"));
 
     Dialog dialog = DialogLocalServiceUtil.fetchDialog(dialogId);
     String topic = dialog.getTopic();

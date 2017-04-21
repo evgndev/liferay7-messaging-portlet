@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import evgn.dev.messaging.model.Dialog;
@@ -28,17 +29,17 @@ import evgn.dev.messaging.model.DialogMessage;
 import evgn.dev.messaging.model.impl.DialogMessageImpl;
 import evgn.dev.messaging.service.DialogMemberLocalServiceUtil;
 import evgn.dev.messaging.service.base.DialogMessageLocalServiceBaseImpl;
+import evgn.dev.messaging.util.EmailUtil;
+import evgn.dev.messaging.util.ResourcesUtil;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * The implementation of the dialog message local service.
- *
+ * <p>
  * <p>
  * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link evgn.dev.messaging.service.DialogMessageLocalService} interface.
- *
+ * <p>
  * <p>
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
@@ -51,7 +52,7 @@ import java.util.List;
 public class DialogMessageLocalServiceImpl
         extends DialogMessageLocalServiceBaseImpl {
     /*
-	 * NOTE FOR DEVELOPERS:
+     * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use {@link evgn.dev.messaging.service.DialogMessageLocalServiceUtil} to access the dialog message local service.
 	 */
@@ -64,11 +65,14 @@ public class DialogMessageLocalServiceImpl
                                        String text,
                                        long receiverId,
                                        String receiverType,
+                                       boolean isDuplicateByEmail,
+                                       boolean disableAnswering,
                                        List<String> errors) throws SystemException {
 
         try {
             DialogMember senderDialogMember;
             Dialog dialog = dialogPersistence.fetchByPrimaryKey(dialogId);
+            Set<DialogMember> receiverMemberList = new HashSet<>();
 
             if (dialog == null) {
                 //create new dialog
@@ -79,15 +83,28 @@ public class DialogMessageLocalServiceImpl
                 dialog.setTopic(topic);
 
                 //save receiver member
-                DialogMemberLocalServiceUtil.createDialogMember(dialogId, receiverId, receiverType);
+                User receiverUser;
+                if (receiverType.equals("user")) {
+                    receiverUser = UserLocalServiceUtil.getUser(receiverId);
+                } else {
+                    throw new Exception("Unimplemented receiver type " + receiverType);
+                }
+                receiverMemberList.add(DialogMemberLocalServiceUtil.createDialogMember(dialogId, receiverUser));
+
                 //save sender member
                 senderDialogMember = DialogMemberLocalServiceUtil.createDialogMember(dialogId, user);
 
                 dialog.setCreatorMemberId(senderDialogMember.getDialogMemberId());
             } else {
-                //get member
+                //get members
+                // get sender
                 senderDialogMember = DialogMemberLocalServiceUtil.getByDialogAndMember(
                         dialogId, user.getUserId(), DialogMemberLocalServiceImpl.MEMBER_TYPE_USER);
+
+                // get receivers
+                receiverMemberList.addAll(DialogMemberLocalServiceUtil.getByDialog(dialogId));
+                receiverMemberList.remove(senderDialogMember);
+                topic = dialog.getTopic();
             }
 
             //create message
@@ -111,9 +128,43 @@ public class DialogMessageLocalServiceImpl
             //save message
             message = dialogMessagePersistence.update(message);
 
+            if (isDuplicateByEmail) {
+                sendEmailNotificationToReceivers(topic, text, senderDialogMember, receiverMemberList);
+            }
+
             return message;
         } catch (Exception e) {
             throw new SystemException("Cannot create message", e);
+        }
+    }
+
+    private void sendEmailNotificationToReceivers(String topic, String text, DialogMember senderDialogMember, Set<DialogMember> receiverMemberList) throws Exception {
+        for (DialogMember receiverMember : receiverMemberList) {
+            if (receiverMember.getMemberType().equalsIgnoreCase("user")) {
+                try {
+                    User userReceiver = UserLocalServiceUtil.fetchUser(receiverMember.getMemberId());
+                    String emailTopic = ResourcesUtil.getString(userReceiver.getLocale(), "mail.topic");
+                    String emailText = ResourcesUtil.getString(userReceiver.getLocale(), "mail.text")
+                            + ":<br>"
+                            + ResourcesUtil.getString(userReceiver.getLocale(), "messaging.topic")
+                            + ": "
+                            + topic
+                            + "<br>"
+                            + ResourcesUtil.getString(userReceiver.getLocale(), "messaging.text")
+                            + ": "
+                            + text
+                            + "<br>"
+                            + ResourcesUtil.getString(userReceiver.getLocale(), "messaging.sender")
+                            + ": "
+                            + senderDialogMember.getName();
+
+                    EmailUtil.sendEmailToUserWithHeaderAndFooter(emailTopic, emailText, userReceiver);
+                } catch (Exception e) {
+                    LOG.error("Cannot send email notification about message", e);
+                }
+            } else {
+                throw new Exception("Unimplemented receiver type " + receiverMember.getMemberType());
+            }
         }
     }
 

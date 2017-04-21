@@ -4,6 +4,7 @@ create table dmsg_Dialog (
 	creatorMemberId LONG,
 	lastMessageDate DATE null,
 	lastMessageId LONG,
+	disableAnswering BOOLEAN,
 	createDate DATE null,
 	creatorUserId LONG
 );

@@ -7,6 +7,7 @@
 		<field name="creatorMemberId" type="long" />
 		<field name="lastMessageDate" type="Date" />
 		<field name="lastMessageId" type="long" />
+		<field name="disableAnswering" type="boolean" />
 		<field name="createDate" type="Date" />
 		<field name="creatorUserId" type="long" />
 	</model>

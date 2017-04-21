@@ -115,7 +115,6 @@ public class DialogMemberLocalServiceImpl
         return result;
     }
 
-
     /**
      * @return empty in error case
      */

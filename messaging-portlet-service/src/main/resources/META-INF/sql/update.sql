@@ -5,7 +5,8 @@ create table dmsg_Dialog (
 	lastMessageDate timestamp without time zone null,
 	lastMessageId bigint,
 	createDate timestamp without time zone null,
-	creatorUserId bigint
+	creatorUserId bigint,
+	disableAnswering BOOLEAN
 );
 
 create table dmsg_DialogMember (

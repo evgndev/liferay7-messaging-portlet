@@ -52,7 +52,6 @@ public class DialogLocalServiceImpl extends DialogLocalServiceBaseImpl {
 	 */
     private static Log LOG = LogFactoryUtil.getLog(DialogLocalServiceImpl.class.getName());
 
-
     public List<Dialog> getUserDialogs(User user, int start, int end) {
         List<Dialog> dialogs = new ArrayList<>();
         String userScreenName = "null";

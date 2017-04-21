@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import evgn.dev.messaging.model.DialogMessage;
 import evgn.dev.messaging.service.DialogMessageLocalServiceUtil;
+import evgn.dev.messaging.util.PropertiesUtil;
 import evgn.dev.messaging.util.RedirectUtil;
 import evgn.dev.messaging.util.UserCustomUtil;
 import org.osgi.service.component.annotations.Component;
@@ -60,7 +61,8 @@ public class MessagingPortlet extends MVCPortlet {
             long receiverId = ParamUtil.getLong(request, RECEIVER);
 
             DialogMessage message = DialogMessageLocalServiceUtil.createMessage(
-                    user, dialogId, topic, messageText, receiverId, "user", errors);
+                    user, dialogId, topic, messageText, receiverId, "user",
+                    PropertiesUtil.isSendMailNotificationAboutMessage(), false, errors);
 
             dialogId = message.getDialogId();
 

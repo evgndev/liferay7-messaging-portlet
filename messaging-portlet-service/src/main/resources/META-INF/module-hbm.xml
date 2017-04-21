@@ -13,6 +13,7 @@
 		<property name="creatorMemberId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="lastMessageDate" type="org.hibernate.type.TimestampType" />
 		<property name="lastMessageId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="disableAnswering" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="createDate" type="org.hibernate.type.TimestampType" />
 		<property name="creatorUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>

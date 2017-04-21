@@ -93,11 +93,12 @@ public class DialogMessageLocalServiceUtil {
 	public static evgn.dev.messaging.model.DialogMessage createMessage(
 		com.liferay.portal.kernel.model.User user, long dialogId,
 		java.lang.String topic, java.lang.String text, long receiverId,
-		java.lang.String receiverType, java.util.List<java.lang.String> errors)
+		java.lang.String receiverType, boolean isDuplicateByEmail,
+		boolean disableAnswering, java.util.List<java.lang.String> errors)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .createMessage(user, dialogId, topic, text, receiverId,
-			receiverType, errors);
+			receiverType, isDuplicateByEmail, disableAnswering, errors);
 	}
 
 	/**

@@ -71,6 +71,7 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 			{ "creatorMemberId", Types.BIGINT },
 			{ "lastMessageDate", Types.TIMESTAMP },
 			{ "lastMessageId", Types.BIGINT },
+			{ "disableAnswering", Types.BOOLEAN },
 			{ "createDate", Types.TIMESTAMP },
 			{ "creatorUserId", Types.BIGINT }
 		};
@@ -82,11 +83,12 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 		TABLE_COLUMNS_MAP.put("creatorMemberId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("lastMessageDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("lastMessageId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("disableAnswering", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("creatorUserId", Types.BIGINT);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table dmsg_Dialog (dialogId LONG not null primary key,topic VARCHAR(75) null,creatorMemberId LONG,lastMessageDate DATE null,lastMessageId LONG,createDate DATE null,creatorUserId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table dmsg_Dialog (dialogId LONG not null primary key,topic VARCHAR(75) null,creatorMemberId LONG,lastMessageDate DATE null,lastMessageId LONG,disableAnswering BOOLEAN,createDate DATE null,creatorUserId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table dmsg_Dialog";
 	public static final String ORDER_BY_JPQL = " ORDER BY dialog.lastMessageDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY dmsg_Dialog.lastMessageDate DESC";
@@ -145,6 +147,7 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 		attributes.put("creatorMemberId", getCreatorMemberId());
 		attributes.put("lastMessageDate", getLastMessageDate());
 		attributes.put("lastMessageId", getLastMessageId());
+		attributes.put("disableAnswering", getDisableAnswering());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("creatorUserId", getCreatorUserId());
 
@@ -184,6 +187,12 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 
 		if (lastMessageId != null) {
 			setLastMessageId(lastMessageId);
+		}
+
+		Boolean disableAnswering = (Boolean)attributes.get("disableAnswering");
+
+		if (disableAnswering != null) {
+			setDisableAnswering(disableAnswering);
 		}
 
 		Date createDate = (Date)attributes.get("createDate");
@@ -255,6 +264,21 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 	}
 
 	@Override
+	public boolean getDisableAnswering() {
+		return _disableAnswering;
+	}
+
+	@Override
+	public boolean isDisableAnswering() {
+		return _disableAnswering;
+	}
+
+	@Override
+	public void setDisableAnswering(boolean disableAnswering) {
+		_disableAnswering = disableAnswering;
+	}
+
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -322,6 +346,7 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 		dialogImpl.setCreatorMemberId(getCreatorMemberId());
 		dialogImpl.setLastMessageDate(getLastMessageDate());
 		dialogImpl.setLastMessageId(getLastMessageId());
+		dialogImpl.setDisableAnswering(getDisableAnswering());
 		dialogImpl.setCreateDate(getCreateDate());
 		dialogImpl.setCreatorUserId(getCreatorUserId());
 
@@ -414,6 +439,8 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 
 		dialogCacheModel.lastMessageId = getLastMessageId();
 
+		dialogCacheModel.disableAnswering = getDisableAnswering();
+
 		Date createDate = getCreateDate();
 
 		if (createDate != null) {
@@ -430,7 +457,7 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{dialogId=");
 		sb.append(getDialogId());
@@ -442,6 +469,8 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 		sb.append(getLastMessageDate());
 		sb.append(", lastMessageId=");
 		sb.append(getLastMessageId());
+		sb.append(", disableAnswering=");
+		sb.append(getDisableAnswering());
 		sb.append(", createDate=");
 		sb.append(getCreateDate());
 		sb.append(", creatorUserId=");
@@ -453,7 +482,7 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("evgn.dev.messaging.model.Dialog");
@@ -480,6 +509,10 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 		sb.append(getLastMessageId());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>disableAnswering</column-name><column-value><![CDATA[");
+		sb.append(getDisableAnswering());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>createDate</column-name><column-value><![CDATA[");
 		sb.append(getCreateDate());
 		sb.append("]]></column-value></column>");
@@ -502,6 +535,7 @@ public class DialogModelImpl extends BaseModelImpl<Dialog>
 	private long _creatorMemberId;
 	private Date _lastMessageDate;
 	private long _lastMessageId;
+	private boolean _disableAnswering;
 	private Date _createDate;
 	private long _creatorUserId;
 	private Dialog _escapedModel;

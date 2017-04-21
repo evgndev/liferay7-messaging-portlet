@@ -37,6 +37,7 @@ import evgn.dev.messaging.model.DialogMessage;
 
 import java.io.Serializable;
 
+import java.util.*;
 import java.util.List;
 
 /**
@@ -100,7 +101,8 @@ public interface DialogMessageLocalService extends BaseLocalService,
 
 	public DialogMessage createMessage(User user, long dialogId,
 		java.lang.String topic, java.lang.String text, long receiverId,
-		java.lang.String receiverType, List<java.lang.String> errors)
+		java.lang.String receiverType, boolean isDuplicateByEmail,
+		boolean disableAnswering, List<java.lang.String> errors)
 		throws SystemException;
 
 	/**

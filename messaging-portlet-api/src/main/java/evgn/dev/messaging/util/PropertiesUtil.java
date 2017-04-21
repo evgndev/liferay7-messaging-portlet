@@ -20,9 +20,6 @@ public class PropertiesUtil {
 
     private static final Log LOG = LogFactoryUtil.getLog(PropertiesUtil.class.getName());
 
-    /**
-     * String with user ids
-     */
     public static Set<Long> getAvailableReceivers(User user) {
         Set<Long> userIds = new HashSet<>();
 
@@ -40,5 +37,9 @@ public class PropertiesUtil {
         }
 
         return userIds;
+    }
+
+    public static boolean isSendMailNotificationAboutMessage() {
+        return GetterUtil.getBoolean(PropsUtil.get("messaging.notification.email"), false);
     }
 }

@@ -42,8 +42,7 @@
             total = DialogLocalServiceUtil.getUserDialogsCount(user).intValue();
 
             if (total > 0) {
-                results = DialogLocalServiceUtil.getUserDialogs(
-                        user, searchContainer.getStart(), searchContainer.getEnd());
+                results = DialogLocalServiceUtil.getUserDialogs(user, searchContainer.getStart(), searchContainer.getEnd());
             }
 
             searchContainer.setTotal(total);

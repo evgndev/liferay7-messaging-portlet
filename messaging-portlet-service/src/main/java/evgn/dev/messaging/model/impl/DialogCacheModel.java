@@ -65,7 +65,7 @@ public class DialogCacheModel implements CacheModel<Dialog>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{dialogId=");
 		sb.append(dialogId);
@@ -77,6 +77,8 @@ public class DialogCacheModel implements CacheModel<Dialog>, Externalizable {
 		sb.append(lastMessageDate);
 		sb.append(", lastMessageId=");
 		sb.append(lastMessageId);
+		sb.append(", disableAnswering=");
+		sb.append(disableAnswering);
 		sb.append(", createDate=");
 		sb.append(createDate);
 		sb.append(", creatorUserId=");
@@ -109,6 +111,7 @@ public class DialogCacheModel implements CacheModel<Dialog>, Externalizable {
 		}
 
 		dialogImpl.setLastMessageId(lastMessageId);
+		dialogImpl.setDisableAnswering(disableAnswering);
 
 		if (createDate == Long.MIN_VALUE) {
 			dialogImpl.setCreateDate(null);
@@ -133,6 +136,8 @@ public class DialogCacheModel implements CacheModel<Dialog>, Externalizable {
 		lastMessageDate = objectInput.readLong();
 
 		lastMessageId = objectInput.readLong();
+
+		disableAnswering = objectInput.readBoolean();
 		createDate = objectInput.readLong();
 
 		creatorUserId = objectInput.readLong();
@@ -154,6 +159,8 @@ public class DialogCacheModel implements CacheModel<Dialog>, Externalizable {
 		objectOutput.writeLong(lastMessageDate);
 
 		objectOutput.writeLong(lastMessageId);
+
+		objectOutput.writeBoolean(disableAnswering);
 		objectOutput.writeLong(createDate);
 
 		objectOutput.writeLong(creatorUserId);
@@ -164,6 +171,7 @@ public class DialogCacheModel implements CacheModel<Dialog>, Externalizable {
 	public long creatorMemberId;
 	public long lastMessageDate;
 	public long lastMessageId;
+	public boolean disableAnswering;
 	public long createDate;
 	public long creatorUserId;
 }

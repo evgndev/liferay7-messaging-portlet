@@ -134,6 +134,27 @@ public interface DialogModel extends BaseModel<Dialog> {
 	public void setLastMessageId(long lastMessageId);
 
 	/**
+	 * Returns the disable answering of this dialog.
+	 *
+	 * @return the disable answering of this dialog
+	 */
+	public boolean getDisableAnswering();
+
+	/**
+	 * Returns <code>true</code> if this dialog is disable answering.
+	 *
+	 * @return <code>true</code> if this dialog is disable answering; <code>false</code> otherwise
+	 */
+	public boolean isDisableAnswering();
+
+	/**
+	 * Sets whether this dialog is disable answering.
+	 *
+	 * @param disableAnswering the disable answering of this dialog
+	 */
+	public void setDisableAnswering(boolean disableAnswering);
+
+	/**
 	 * Returns the create date of this dialog.
 	 *
 	 * @return the create date of this dialog

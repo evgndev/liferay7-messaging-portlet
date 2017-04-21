@@ -62,6 +62,7 @@ public class DialogWrapper implements Dialog, ModelWrapper<Dialog> {
 		attributes.put("creatorMemberId", getCreatorMemberId());
 		attributes.put("lastMessageDate", getLastMessageDate());
 		attributes.put("lastMessageId", getLastMessageId());
+		attributes.put("disableAnswering", getDisableAnswering());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("creatorUserId", getCreatorUserId());
 
@@ -100,6 +101,12 @@ public class DialogWrapper implements Dialog, ModelWrapper<Dialog> {
 			setLastMessageId(lastMessageId);
 		}
 
+		Boolean disableAnswering = (Boolean)attributes.get("disableAnswering");
+
+		if (disableAnswering != null) {
+			setDisableAnswering(disableAnswering);
+		}
+
 		Date createDate = (Date)attributes.get("createDate");
 
 		if (createDate != null) {
@@ -113,9 +120,29 @@ public class DialogWrapper implements Dialog, ModelWrapper<Dialog> {
 		}
 	}
 
+	/**
+	* Returns the disable answering of this dialog.
+	*
+	* @return the disable answering of this dialog
+	*/
+	@Override
+	public boolean getDisableAnswering() {
+		return _dialog.getDisableAnswering();
+	}
+
 	@Override
 	public boolean isCachedModel() {
 		return _dialog.isCachedModel();
+	}
+
+	/**
+	* Returns <code>true</code> if this dialog is disable answering.
+	*
+	* @return <code>true</code> if this dialog is disable answering; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isDisableAnswering() {
+		return _dialog.isDisableAnswering();
 	}
 
 	@Override
@@ -326,6 +353,16 @@ public class DialogWrapper implements Dialog, ModelWrapper<Dialog> {
 	@Override
 	public void setDialogId(long dialogId) {
 		_dialog.setDialogId(dialogId);
+	}
+
+	/**
+	* Sets whether this dialog is disable answering.
+	*
+	* @param disableAnswering the disable answering of this dialog
+	*/
+	@Override
+	public void setDisableAnswering(boolean disableAnswering) {
+		_dialog.setDisableAnswering(disableAnswering);
 	}
 
 	@Override
