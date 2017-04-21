@@ -23,6 +23,7 @@
 		<property name="dialogId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="memberId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="memberType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="evgn.dev.messaging.model.impl.DialogMessageImpl" table="dmsg_DialogMessage">
 		<id name="messageId" type="long">

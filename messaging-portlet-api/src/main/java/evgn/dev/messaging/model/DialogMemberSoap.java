@@ -36,6 +36,7 @@ public class DialogMemberSoap implements Serializable {
 		soapModel.setDialogId(model.getDialogId());
 		soapModel.setMemberId(model.getMemberId());
 		soapModel.setMemberType(model.getMemberType());
+		soapModel.setName(model.getName());
 
 		return soapModel;
 	}
@@ -120,8 +121,17 @@ public class DialogMemberSoap implements Serializable {
 		_memberType = memberType;
 	}
 
+	public String getName() {
+		return _name;
+	}
+
+	public void setName(String name) {
+		_name = name;
+	}
+
 	private long _dialogMemberId;
 	private long _dialogId;
 	private long _memberId;
 	private String _memberType;
+	private String _name;
 }

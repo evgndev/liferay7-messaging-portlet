@@ -96,6 +96,10 @@ public interface DialogMemberLocalService extends BaseLocalService,
 	public DialogMember createDialogMember(long dialogId, long memberId,
 		java.lang.String memberType) throws SystemException;
 
+	public DialogMember createDialogMember(long dialogId, long memberId,
+		java.lang.String memberType, java.lang.String name)
+		throws SystemException;
+
 	/**
 	* Creates a new dialog member with the primary key. Does not add the dialog member to the database.
 	*
@@ -239,7 +243,7 @@ public interface DialogMemberLocalService extends BaseLocalService,
 	* @return id of organizations which is member of this dialog
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<java.lang.Object> getMembersByDialod(long dialogId);
+	public List<java.lang.Object> getMembersByDialog(long dialogId);
 
 	/**
 	* Returns the number of rows matching the dynamic query.

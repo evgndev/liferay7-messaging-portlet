@@ -14,7 +14,8 @@ public class ResourcesUtil {
 
     private static final Log LOG = LogFactoryUtil.getLog(ResourcesUtil.class);
 
-    public static final String SERVLET_CONTEXT_NAME = "messagingportletapi";
+    //see api jar -> manifest.mf -> Bundle-SymbolicName -> remove points or dash
+    public static final String SERVLET_CONTEXT_NAME = "evgndevmessagingapi";
 
     public static final String RU = "ru";
     public static final String EN = "en";
@@ -71,8 +72,8 @@ public class ResourcesUtil {
     }
 
     public static void initResources() {
-        LOG.info("Init language resources");
-
+        LOG.info("Init language resources for " + SERVLET_CONTEXT_NAME);
+        
         ResourceBundleLoader resourceBundleLoader = ResourceBundleLoaderUtil.
                 getResourceBundleLoaderByServletContextName(SERVLET_CONTEXT_NAME);
 

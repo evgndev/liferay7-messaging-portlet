@@ -117,6 +117,21 @@ public interface DialogMemberModel extends BaseModel<DialogMember> {
 	 */
 	public void setMemberType(String memberType);
 
+	/**
+	 * Returns the name of this dialog member.
+	 *
+	 * @return the name of this dialog member
+	 */
+	@AutoEscape
+	public String getName();
+
+	/**
+	 * Sets the name of this dialog member.
+	 *
+	 * @param name the name of this dialog member
+	 */
+	public void setName(String name);
+
 	@Override
 	public boolean isNew();
 

@@ -12,7 +12,8 @@ create table dmsg_DialogMember (
 	dialogMemberId LONG not null primary key,
 	dialogId LONG,
 	memberId LONG,
-	memberType VARCHAR(75) null
+	memberType VARCHAR(75) null,
+	name VARCHAR(75) null
 );
 
 create table dmsg_DialogMessage (

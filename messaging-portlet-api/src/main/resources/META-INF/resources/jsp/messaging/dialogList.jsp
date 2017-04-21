@@ -4,7 +4,12 @@
 <%@ page import="evgn.dev.messaging.portlet.MessagingPortlet" %>
 <%@ page import="evgn.dev.messaging.service.DialogMessageLocalServiceUtil" %>
 <%@ page import="evgn.dev.messaging.model.DialogMessage" %>
-<%@ page import="com.liferay.portal.kernel.service.permission.PortletPermissionUtil" %>
+<%@ page import="evgn.dev.messaging.util.PermissionUtil" %>
+<%@ page import="evgn.dev.messaging.util.UserCustomUtil" %>
+<%@ page import="evgn.dev.messaging.service.DialogMemberLocalServiceUtil" %>
+<%@ page import="evgn.dev.messaging.model.DialogMember" %>
+<%@ page import="com.google.common.base.Joiner" %>
+<%@ page import="com.google.common.base.Strings" %>
 
 <%@ include file="../init.jsp" %>
 <%@ include file="../errors.jsp" %>
@@ -15,8 +20,9 @@
 %>
 
 <%--Create new--%>
-<c:if test="<%= PortletPermissionUtil.contains(permissionChecker, portletName, "CREATE_MSG") %>">
-    <div class="">
+<c:if test="<%= PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_MSG")
+        && PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_DIALOG")%>">
+    <div>
         <liferay-portlet:renderURL var="createDialogURL">
             <liferay-portlet:param name="<%= JSP %>" value="<%= MessagingPortlet.JSP_MESSAGE %>"/>
         </liferay-portlet:renderURL>
@@ -28,7 +34,7 @@
 
 <%--Table--%>
 <liferay-ui:search-container
-        emptyResultsMessage="message.empty"
+        emptyResultsMessage="messaging.empty"
         delta="20"
 >
     <liferay-ui:search-container-results>
@@ -51,24 +57,51 @@
             rowVar="row"
     >
         <liferay-ui:search-container-column-text name="">
+            <%
+                DialogMessage lastMessage = DialogMessageLocalServiceUtil.getLastMessage(dialog.getDialogId());
+                String lastMessageText = "";
+                String lastMessageSender = "";
+                //set last msg data
+                if (lastMessage != null) {
+                    //get text
+                    lastMessageText = lastMessage.getText();
+                    if (lastMessageText.length() > 200) {
+                        lastMessageText = lastMessageText.substring(0, 200) + "...";
+                    }
+
+                    //get sender
+                    boolean isUserMsg = lastMessage.getUserId() == user.getUserId();
+                    lastMessageSender = ResourcesUtil.getString(locale, "you");
+                    if (!isUserMsg) {
+                        lastMessageSender = UserCustomUtil.getUserFIO(lastMessage.getUserId());
+                    }
+                    lastMessageSender += ": ";
+                }
+
+                //get members
+                List<String> memberNames = new ArrayList<>();
+                for (DialogMember dialogMember : DialogMemberLocalServiceUtil.getByDialog(dialog.getDialogId())) {
+                    if (dialogMember.getMemberId() != user.getUserId() && !Strings.isNullOrEmpty(dialogMember.getName())) {
+                        memberNames.add(dialogMember.getName());
+                    }
+                }
+                String members = Joiner.on(", ").join(memberNames);
+            %>
             <div class="row">
                 <div class="col-md-10">
-                    <div class="row bold-text">
-                        <%= dialog.getTopic() %>
+                    <div>
+                        <span class="bold-text"><%= dialog.getTopic() %></span>
+                        &nbsp;
+                        &nbsp;
+                        <span class="fs15 c666"><%= members %></span>
                     </div>
-                    <div class="row">
-                        <%
-                            DialogMessage lastMessage = DialogMessageLocalServiceUtil
-                                    .getLastMessage(dialog.getDialogId());
-                            String lastMessageText = "";
-                            if (lastMessage != null) {
-                                lastMessageText = lastMessage.getText();
-                            }
-                            if (lastMessageText.length() > 200) {
-                                lastMessageText = lastMessageText.substring(0, 200) + "...";
-                            }
-                        %>
-                        <%= lastMessageText %>
+                    <div class="fs15 ml10 c777">
+                        <span class="bold-text">
+                            <%= lastMessageSender %>
+                        </span>
+                        <span>
+                            <%= lastMessageText %>
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-2 align-right">

@@ -99,7 +99,7 @@ public class DialogMessageLocalServiceImpl
             message.setCreateDate(new Date());
             message.setText(text);
             message.setDialogMemberId(senderDialogMember.getDialogMemberId());
-            message.setDialogId(dialogId);
+            message.setDialogId(dialog.getDialogId());
 
             //set dialog last message data
             dialog.setLastMessageDate(new Date());
@@ -109,7 +109,7 @@ public class DialogMessageLocalServiceImpl
             dialogPersistence.update(dialog);
 
             //save message
-            dialogMessagePersistence.update(message);
+            message = dialogMessagePersistence.update(message);
 
             return message;
         } catch (Exception e) {

@@ -40,6 +40,8 @@
 		<column name="memberId" type="long"/>
 		<!--by default is user -->
 		<column name="memberType" type="String"/>
+		
+		<column name="name" type="String"/>
 
 		<!-- Finder methods -->
 		<finder name="Dialog" return-type="Collection">

@@ -5,12 +5,15 @@
 <%@ page import="javax.portlet.PortletURL" %>
 <%@ page import="evgn.dev.messaging.service.DialogMessageLocalServiceUtil" %>
 <%@ page import="evgn.dev.messaging.util.UserCustomUtil" %>
+<%@ page import="evgn.dev.messaging.util.DateCustomUtil" %>
+<%@ page import="evgn.dev.messaging.util.PermissionUtil" %>
 <%@ include file="../init.jsp" %>
 <%@ include file="../errors.jsp" %>
 
 <%
     long dialogId = ParamUtil.getLong(request, MessagingPortlet.DIALOG_ID);
-    Dialog dialog = DialogLocalServiceUtil.(dialogId);
+
+    Dialog dialog = DialogLocalServiceUtil.fetchDialog(dialogId);
     String topic = dialog.getTopic();
 
     PortletURL backURL = renderResponse.createRenderURL();
@@ -21,7 +24,7 @@
 <%--Table--%>
 <liferay-ui:search-container
         emptyResultsMessage="empty"
-        delta="20"
+        delta="1000"
 >
     <liferay-ui:search-container-results>
         <%
@@ -40,14 +43,23 @@
             rowVar="row"
     >
         <liferay-ui:search-container-column-text name="">
-            <div class="row">
-                <div class="col-md-10">
+            <%
+                boolean isUserMsg = dialogMessage.getUserId() == user.getUserId();
+                String css = isUserMsg ? "align-right" : "";
+                String sender = ResourcesUtil.getString(locale, "you");
+                if (!isUserMsg) {
+                    sender = UserCustomUtil.getUserFIO(dialogMessage.getUserId());
+                }
+            %>
+            <div class="">
+                <div class="bold-text <%= css %>">
+                    <%= sender %>
+                </div>
+                <div class="c777 ml10 <%= css %>">
                     <%= dialogMessage.getText() %>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 align-right">
-                    <%= UserCustomUtil.getUserFIO(dialogMessage.getUserId()) %>
+                <div class="align-right fs14">
+                    <%= DateCustomUtil.toViewFormatDateWithTime(dialogMessage.getCreateDate()) %>
                 </div>
             </div>
         </liferay-ui:search-container-column-text>
@@ -56,12 +68,14 @@
 </liferay-ui:search-container>
 
 <%--Create new message--%>
-<div class="align-center">
-    <liferay-portlet:renderURL var="createDialogURL">
-        <liferay-portlet:param name="<%= JSP %>" value="<%= MessagingPortlet.JSP_MESSAGE %>"/>
-        <liferay-portlet:param name="<%= MessagingPortlet.DIALOG_ID %>" value="<%= String.valueOf(dialogId) %>"/>
-    </liferay-portlet:renderURL>
-    <aui:a href="<%= createDialogURL %>">
-        <liferay-ui:message key="messaging.reply"/>
-    </aui:a>
-</div>
+<c:if test="<%= PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_MSG")%>">
+    <div class="align-center">
+        <liferay-portlet:renderURL var="createDialogURL">
+            <liferay-portlet:param name="<%= JSP %>" value="<%= MessagingPortlet.JSP_MESSAGE %>"/>
+            <liferay-portlet:param name="<%= MessagingPortlet.DIALOG_ID %>" value="<%= String.valueOf(dialogId) %>"/>
+        </liferay-portlet:renderURL>
+        <aui:a href="<%= createDialogURL %>">
+            <liferay-ui:message key="messaging.reply"/>
+        </aui:a>
+    </div>
+</c:if>

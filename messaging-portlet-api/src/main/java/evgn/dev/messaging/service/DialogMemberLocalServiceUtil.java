@@ -91,6 +91,14 @@ public class DialogMemberLocalServiceUtil {
 		return getService().createDialogMember(dialogId, memberId, memberType);
 	}
 
+	public static evgn.dev.messaging.model.DialogMember createDialogMember(
+		long dialogId, long memberId, java.lang.String memberType,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .createDialogMember(dialogId, memberId, memberType, name);
+	}
+
 	/**
 	* Creates a new dialog member with the primary key. Does not add the dialog member to the database.
 	*
@@ -269,9 +277,9 @@ public class DialogMemberLocalServiceUtil {
 	/**
 	* @return id of organizations which is member of this dialog
 	*/
-	public static java.util.List<java.lang.Object> getMembersByDialod(
+	public static java.util.List<java.lang.Object> getMembersByDialog(
 		long dialogId) {
-		return getService().getMembersByDialod(dialogId);
+		return getService().getMembersByDialog(dialogId);
 	}
 
 	/**

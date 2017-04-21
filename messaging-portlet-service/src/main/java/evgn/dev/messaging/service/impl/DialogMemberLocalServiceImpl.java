@@ -58,16 +58,22 @@ public class DialogMemberLocalServiceImpl
     public static final String MEMBER_TYPE_USER = "user";
 
     public DialogMember createDialogMember(long dialogId, User user) throws SystemException {
-        return createDialogMember(dialogId, user.getUserId(), MEMBER_TYPE_USER);
+        String name = user.getFirstName() + " " + user.getLastName();
+        return createDialogMember(dialogId, user.getUserId(), MEMBER_TYPE_USER, name);
     }
 
     public DialogMember createDialogMember(long dialogId, long memberId, String memberType) throws SystemException {
+        return createDialogMember(dialogId, memberId, memberType, "");
+    }
+
+    public DialogMember createDialogMember(long dialogId, long memberId, String memberType, String name) throws SystemException {
         try {
             long dialogMemberId = CounterLocalServiceUtil.increment(DialogMember.class.getName());
             DialogMember dialogMember = DialogMemberLocalServiceUtil.createDialogMember(dialogMemberId);
             dialogMember.setDialogId(dialogId);
             dialogMember.setMemberId(memberId);
             dialogMember.setMemberType(memberType);
+            dialogMember.setName(name);
             DialogMemberLocalServiceUtil.updateDialogMember(dialogMember);
             return dialogMember;
         } catch (Exception e) {
@@ -78,7 +84,7 @@ public class DialogMemberLocalServiceImpl
     /**
      * @return id of organizations which is member of this dialog
      */
-    public List<Object> getMembersByDialod(long dialogId) {
+    public List<Object> getMembersByDialog(long dialogId) {
         List<Object> members = new ArrayList<>();
         try {
             List<DialogMember> dialogMembers = DialogMemberLocalServiceUtil.getByDialog(dialogId);

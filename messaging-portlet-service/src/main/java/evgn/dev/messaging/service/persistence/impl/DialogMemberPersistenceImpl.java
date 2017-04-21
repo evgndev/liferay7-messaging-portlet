@@ -1790,6 +1790,7 @@ public class DialogMemberPersistenceImpl extends BasePersistenceImpl<DialogMembe
 		dialogMemberImpl.setDialogId(dialogMember.getDialogId());
 		dialogMemberImpl.setMemberId(dialogMember.getMemberId());
 		dialogMemberImpl.setMemberType(dialogMember.getMemberType());
+		dialogMemberImpl.setName(dialogMember.getName());
 
 		return dialogMemberImpl;
 	}

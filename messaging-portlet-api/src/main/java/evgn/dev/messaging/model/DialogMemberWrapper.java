@@ -61,6 +61,7 @@ public class DialogMemberWrapper implements DialogMember,
 		attributes.put("dialogId", getDialogId());
 		attributes.put("memberId", getMemberId());
 		attributes.put("memberType", getMemberType());
+		attributes.put("name", getName());
 
 		return attributes;
 	}
@@ -89,6 +90,12 @@ public class DialogMemberWrapper implements DialogMember,
 
 		if (memberType != null) {
 			setMemberType(memberType);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
 		}
 	}
 
@@ -155,6 +162,16 @@ public class DialogMemberWrapper implements DialogMember,
 	@Override
 	public java.lang.String getMemberType() {
 		return _dialogMember.getMemberType();
+	}
+
+	/**
+	* Returns the name of this dialog member.
+	*
+	* @return the name of this dialog member
+	*/
+	@Override
+	public java.lang.String getName() {
+		return _dialogMember.getName();
 	}
 
 	@Override
@@ -271,6 +288,16 @@ public class DialogMemberWrapper implements DialogMember,
 	@Override
 	public void setMemberType(java.lang.String memberType) {
 		_dialogMember.setMemberType(memberType);
+	}
+
+	/**
+	* Sets the name of this dialog member.
+	*
+	* @param name the name of this dialog member
+	*/
+	@Override
+	public void setName(java.lang.String name) {
+		_dialogMember.setName(name);
 	}
 
 	@Override

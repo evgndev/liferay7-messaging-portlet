@@ -11,17 +11,12 @@
 
 <%
     long dialogId = ParamUtil.getLong(request, MessagingPortlet.DIALOG_ID);
-
     Dialog dialog = DialogLocalServiceUtil.fetchDialog(dialogId);
-
     boolean isNewDialog = dialog == null;
-
     String topic = "";
-
     if (!isNewDialog) {
         topic = dialog.getTopic();
     }
-
     PortletURL backURL = renderResponse.createRenderURL();
 %>
 
@@ -42,6 +37,7 @@
                     label="messaging.receiver" required="true">
             <%
                 for (User toUser : users) {
+                    if (toUser.getUserId() == user.getUserId()) continue;
             %>
             <aui:option label="<%= UserCustomUtil.getUserFIO(toUser) %>"
                         value="<%= String.valueOf(toUser.getUserId()) %>"

@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
+import evgn.dev.messaging.model.DialogMessage;
 import evgn.dev.messaging.service.DialogMessageLocalServiceUtil;
 import evgn.dev.messaging.util.RedirectUtil;
 import evgn.dev.messaging.util.UserCustomUtil;
@@ -56,15 +57,19 @@ public class MessagingPortlet extends MVCPortlet {
             String messageText = ParamUtil.getString(request, TEXT);
             long receiverId = ParamUtil.getLong(request, RECEIVER);
 
-            DialogMessageLocalServiceUtil.createMessage(
+            DialogMessage message = DialogMessageLocalServiceUtil.createMessage(
                     user, dialogId, topic, messageText, receiverId, "user", errors);
 
+            dialogId = message.getDialogId();
+
+            response.setRenderParameter(DIALOG_ID, String.valueOf(dialogId));
+            response.setRenderParameter(RedirectUtil.PAGE, JSP_DIALOG);
+
         } catch (Exception e) {
+            errors.add("messaging.error.messageCreation");
             LOG.error("Cannot send message", e);
         }
 
-        response.setRenderParameter(DIALOG_ID, String.valueOf(dialogId));
-        response.setRenderParameter(RedirectUtil.PAGE, JSP_DIALOG);
         RedirectUtil.backWithError(request, response, errors, JSP_MESSAGE);
     }
 }

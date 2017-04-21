@@ -64,7 +64,7 @@ public class DialogMemberCacheModel implements CacheModel<DialogMember>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(11);
 
 		sb.append("{dialogMemberId=");
 		sb.append(dialogMemberId);
@@ -74,6 +74,8 @@ public class DialogMemberCacheModel implements CacheModel<DialogMember>,
 		sb.append(memberId);
 		sb.append(", memberType=");
 		sb.append(memberType);
+		sb.append(", name=");
+		sb.append(name);
 		sb.append("}");
 
 		return sb.toString();
@@ -94,6 +96,13 @@ public class DialogMemberCacheModel implements CacheModel<DialogMember>,
 			dialogMemberImpl.setMemberType(memberType);
 		}
 
+		if (name == null) {
+			dialogMemberImpl.setName(StringPool.BLANK);
+		}
+		else {
+			dialogMemberImpl.setName(name);
+		}
+
 		dialogMemberImpl.resetOriginalValues();
 
 		return dialogMemberImpl;
@@ -107,6 +116,7 @@ public class DialogMemberCacheModel implements CacheModel<DialogMember>,
 
 		memberId = objectInput.readLong();
 		memberType = objectInput.readUTF();
+		name = objectInput.readUTF();
 	}
 
 	@Override
@@ -124,10 +134,18 @@ public class DialogMemberCacheModel implements CacheModel<DialogMember>,
 		else {
 			objectOutput.writeUTF(memberType);
 		}
+
+		if (name == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(name);
+		}
 	}
 
 	public long dialogMemberId;
 	public long dialogId;
 	public long memberId;
 	public String memberType;
+	public String name;
 }

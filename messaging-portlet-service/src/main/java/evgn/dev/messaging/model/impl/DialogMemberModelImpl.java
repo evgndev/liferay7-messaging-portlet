@@ -64,7 +64,8 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 			{ "dialogMemberId", Types.BIGINT },
 			{ "dialogId", Types.BIGINT },
 			{ "memberId", Types.BIGINT },
-			{ "memberType", Types.VARCHAR }
+			{ "memberType", Types.VARCHAR },
+			{ "name", Types.VARCHAR }
 		};
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP = new HashMap<String, Integer>();
 
@@ -73,9 +74,10 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 		TABLE_COLUMNS_MAP.put("dialogId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("memberId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("memberType", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("name", Types.VARCHAR);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table dmsg_DialogMember (dialogMemberId LONG not null primary key,dialogId LONG,memberId LONG,memberType VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table dmsg_DialogMember (dialogMemberId LONG not null primary key,dialogId LONG,memberId LONG,memberType VARCHAR(75) null,name VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table dmsg_DialogMember";
 	public static final String ORDER_BY_JPQL = " ORDER BY dialogMember.dialogMemberId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY dmsg_DialogMember.dialogMemberId ASC";
@@ -139,6 +141,7 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 		attributes.put("dialogId", getDialogId());
 		attributes.put("memberId", getMemberId());
 		attributes.put("memberType", getMemberType());
+		attributes.put("name", getName());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -170,6 +173,12 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 
 		if (memberType != null) {
 			setMemberType(memberType);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
 		}
 	}
 
@@ -252,6 +261,21 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 		return GetterUtil.getString(_originalMemberType);
 	}
 
+	@Override
+	public String getName() {
+		if (_name == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _name;
+		}
+	}
+
+	@Override
+	public void setName(String name) {
+		_name = name;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -287,6 +311,7 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 		dialogMemberImpl.setDialogId(getDialogId());
 		dialogMemberImpl.setMemberId(getMemberId());
 		dialogMemberImpl.setMemberType(getMemberType());
+		dialogMemberImpl.setName(getName());
 
 		dialogMemberImpl.resetOriginalValues();
 
@@ -380,12 +405,20 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 			dialogMemberCacheModel.memberType = null;
 		}
 
+		dialogMemberCacheModel.name = getName();
+
+		String name = dialogMemberCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			dialogMemberCacheModel.name = null;
+		}
+
 		return dialogMemberCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(11);
 
 		sb.append("{dialogMemberId=");
 		sb.append(getDialogMemberId());
@@ -395,6 +428,8 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 		sb.append(getMemberId());
 		sb.append(", memberType=");
 		sb.append(getMemberType());
+		sb.append(", name=");
+		sb.append(getName());
 		sb.append("}");
 
 		return sb.toString();
@@ -402,7 +437,7 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(16);
+		StringBundler sb = new StringBundler(19);
 
 		sb.append("<model><model-name>");
 		sb.append("evgn.dev.messaging.model.DialogMember");
@@ -424,6 +459,10 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 			"<column><column-name>memberType</column-name><column-value><![CDATA[");
 		sb.append(getMemberType());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>name</column-name><column-value><![CDATA[");
+		sb.append(getName());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -443,6 +482,7 @@ public class DialogMemberModelImpl extends BaseModelImpl<DialogMember>
 	private boolean _setOriginalMemberId;
 	private String _memberType;
 	private String _originalMemberType;
+	private String _name;
 	private long _columnBitmask;
 	private DialogMember _escapedModel;
 }
