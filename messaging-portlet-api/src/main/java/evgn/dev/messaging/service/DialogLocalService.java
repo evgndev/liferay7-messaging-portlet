@@ -147,6 +147,9 @@ public interface DialogLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getDialogsCount();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.Long getUserDialogsCount(User user);
+
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -208,7 +211,7 @@ public interface DialogLocalService extends BaseLocalService,
 	public List<Dialog> getDialogs(int start, int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Dialog> getUserDialogs(User user);
+	public List<Dialog> getUserDialogs(User user, int start, int end);
 
 	/**
 	* Returns the number of rows matching the dynamic query.

@@ -152,6 +152,12 @@ public class DialogLocalServiceWrapper implements DialogLocalService,
 		return _dialogLocalService.getDialogsCount();
 	}
 
+	@Override
+	public java.lang.Long getUserDialogsCount(
+		com.liferay.portal.kernel.model.User user) {
+		return _dialogLocalService.getUserDialogsCount(user);
+	}
+
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -234,8 +240,8 @@ public class DialogLocalServiceWrapper implements DialogLocalService,
 
 	@Override
 	public java.util.List<evgn.dev.messaging.model.Dialog> getUserDialogs(
-		com.liferay.portal.kernel.model.User user) {
-		return _dialogLocalService.getUserDialogs(user);
+		com.liferay.portal.kernel.model.User user, int start, int end) {
+		return _dialogLocalService.getUserDialogs(user, start, end);
 	}
 
 	/**

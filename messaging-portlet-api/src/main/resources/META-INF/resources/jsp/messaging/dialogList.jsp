@@ -1,5 +1,4 @@
 <%@ page import="evgn.dev.messaging.service.DialogLocalServiceUtil" %>
-<%@ page import="evgn.dev.messaging.model.Dialog" %>
 <%@ page import="java.util.List" %>
 <%@ page import="evgn.dev.messaging.portlet.MessagingPortlet" %>
 <%@ page import="evgn.dev.messaging.service.DialogMessageLocalServiceUtil" %>
@@ -10,18 +9,18 @@
 <%@ page import="evgn.dev.messaging.model.DialogMember" %>
 <%@ page import="com.google.common.base.Joiner" %>
 <%@ page import="com.google.common.base.Strings" %>
+<%@ page import="javax.portlet.PortletURL" %>
 
 <%@ include file="../init.jsp" %>
 <%@ include file="../errors.jsp" %>
 
 <%
-    List<Dialog> dialogs = DialogLocalServiceUtil.getUserDialogs(user);
-    long dialogsCount = dialogs.size();
+    PortletURL tableURL = renderResponse.createRenderURL();
 %>
 
-<%--Create new--%>
+<%--Create new --%>
 <c:if test="<%= PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_MSG")
-        && PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_DIALOG")%>">
+        && PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_DIALOG") %>">
     <div>
         <liferay-portlet:renderURL var="createDialogURL">
             <liferay-portlet:param name="<%= JSP %>" value="<%= MessagingPortlet.JSP_MESSAGE %>"/>
@@ -36,13 +35,15 @@
 <liferay-ui:search-container
         emptyResultsMessage="messaging.empty"
         delta="20"
+        iteratorURL="<%= tableURL %>"
 >
     <liferay-ui:search-container-results>
         <%
-            total = (int) dialogsCount;
+            total = DialogLocalServiceUtil.getUserDialogsCount(user).intValue();
 
             if (total > 0) {
-                results = dialogs;
+                results = DialogLocalServiceUtil.getUserDialogs(
+                        user, searchContainer.getStart(), searchContainer.getEnd());
             }
 
             searchContainer.setTotal(total);

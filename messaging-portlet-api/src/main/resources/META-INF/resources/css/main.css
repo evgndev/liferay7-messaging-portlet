@@ -373,3 +373,8 @@ h2.portlet-title-editable {
 .lfr-upload-container .upload-list li input.select-file {
     display: none !important;
 }
+
+/*hide top container*/
+.taglib-search-iterator-page-iterator-top {
+    display: none;
+}

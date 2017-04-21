@@ -148,6 +148,11 @@ public class DialogLocalServiceUtil {
 		return getService().getDialogsCount();
 	}
 
+	public static java.lang.Long getUserDialogsCount(
+		com.liferay.portal.kernel.model.User user) {
+		return getService().getUserDialogsCount(user);
+	}
+
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -224,8 +229,8 @@ public class DialogLocalServiceUtil {
 	}
 
 	public static java.util.List<evgn.dev.messaging.model.Dialog> getUserDialogs(
-		com.liferay.portal.kernel.model.User user) {
-		return getService().getUserDialogs(user);
+		com.liferay.portal.kernel.model.User user, int start, int end) {
+		return getService().getUserDialogs(user, start, end);
 	}
 
 	/**
