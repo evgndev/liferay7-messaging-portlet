@@ -6,12 +6,22 @@
 <%@ page import="com.liferay.portal.kernel.model.User" %>
 <%@ page import="com.liferay.portal.kernel.service.UserLocalServiceUtil" %>
 <%@ page import="evgn.dev.messaging.util.UserCustomUtil" %>
+<%@ page import="com.google.common.base.Strings" %>
+<%@ page import="com.google.common.base.Splitter" %>
+<%@ page import="evgn.dev.messaging.util.PermissionUtil" %>
+<%@ page import="evgn.dev.messaging.util.PropertiesUtil" %>
+
 <%@ include file="../init.jsp" %>
 <%@ include file="../errors.jsp" %>
 
 <%
     long dialogId = ParamUtil.getLong(request, MessagingPortlet.DIALOG_ID);
     Dialog dialog = DialogLocalServiceUtil.fetchDialog(dialogId);
+
+    String receiverAvailableUserIdsStr = ParamUtil.getString(request, "availableUserIds");
+
+    long userId = user.getUserId();
+
     boolean isNewDialog = dialog == null;
     String topic = "";
     if (!isNewDialog) {
@@ -36,9 +46,32 @@
         <aui:select name="<%= MessagingPortlet.RECEIVER %>"
                     label="messaging.receiver" required="true">
             <%
+                Set<Long> availableUserIds = new HashSet<>();
+                if (!Strings.isNullOrEmpty(receiverAvailableUserIdsStr)) {
+                    for (String userIdStr : Splitter.on(",").trimResults().split(receiverAvailableUserIdsStr)) {
+                        try {
+                            long availableUserId = Long.parseLong(userIdStr);
+                            availableUserIds.add(availableUserId);
+                        } catch (Exception e) {
+                            LOG.error("Cannot parse user id " + userIdStr, e);
+                        }
+                    }
+                }
+                availableUserIds.addAll(PropertiesUtil.getAvailableReceivers(user));
+
                 for (User toUser : users) {
-                    if (toUser.getUserId() == user.getUserId()) continue;
+
+                    if (toUser.getUserId() == userId) continue;
                     if (toUser.isDefaultUser()) continue;
+
+                    if (availableUserIds.contains(toUser.getUserId())) {
+                        //ok
+                    } else if (availableUserIds.isEmpty()
+                            && PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_DIALOG")) {
+                        //ok
+                    } else {
+                        continue;
+                    }
             %>
             <aui:option label="<%= UserCustomUtil.getUserFIO(toUser) %>"
                         value="<%= String.valueOf(toUser.getUserId()) %>"
