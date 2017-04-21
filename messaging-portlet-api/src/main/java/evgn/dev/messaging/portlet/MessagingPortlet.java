@@ -3,17 +3,19 @@ package evgn.dev.messaging.portlet;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import evgn.dev.messaging.model.DialogMessage;
 import evgn.dev.messaging.service.DialogMessageLocalServiceUtil;
 import evgn.dev.messaging.util.RedirectUtil;
 import evgn.dev.messaging.util.UserCustomUtil;
 import org.osgi.service.component.annotations.Component;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.Portlet;
+import javax.portlet.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +64,7 @@ public class MessagingPortlet extends MVCPortlet {
 
             dialogId = message.getDialogId();
 
-            response.setRenderParameter(DIALOG_ID, String.valueOf(dialogId));
-            response.setRenderParameter(RedirectUtil.PAGE, JSP_DIALOG);
+            redirectToDialog(request, response, dialogId);
 
         } catch (Exception e) {
             errors.add("messaging.error.messageCreation");
@@ -71,5 +72,25 @@ public class MessagingPortlet extends MVCPortlet {
         }
 
         RedirectUtil.backWithError(request, response, errors, JSP_MESSAGE);
+    }
+
+    private void redirectToDialog(ActionRequest request, ActionResponse response, long dialogId) {
+        try {
+            ThemeDisplay themeDisplay =
+                    (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            PortletURL redirect =
+                    PortletURLFactoryUtil.create(
+                            PortalUtil.getHttpServletRequest(request), this.getPortletName(),
+                            themeDisplay.getLayout().getPlid(), PortletRequest.RENDER_PHASE);
+            redirect.setPortletMode(PortletMode.VIEW);
+            redirect.setWindowState(WindowState.NORMAL);
+
+            redirect.setParameter(DIALOG_ID, String.valueOf(dialogId));
+            redirect.setParameter(RedirectUtil.PAGE, JSP_DIALOG);
+
+            response.sendRedirect(redirect.toString());
+        } catch (Exception e) {
+            LOG.error("Redirect error", e);
+        }
     }
 }

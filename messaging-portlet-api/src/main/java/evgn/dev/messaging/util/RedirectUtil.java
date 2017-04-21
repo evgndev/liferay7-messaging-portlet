@@ -5,12 +5,14 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -73,6 +75,26 @@ public class RedirectUtil {
             }
         } catch (PortalException e) {
             LOG.error("Cannot redirect to " + friendlyUrl, e);
+        }
+    }
+
+    /**
+     * Redirect back to view mode.
+     * https://web.liferay.com/community/forums/-/message_boards/message/52447581
+     */
+    public static void redirect(ActionRequest request, ActionResponse response, String portletName) {
+        try {
+            ThemeDisplay themeDisplay =
+                    (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            PortletURL redirect =
+                    PortletURLFactoryUtil.create(
+                            PortalUtil.getHttpServletRequest(request), portletName,
+                            themeDisplay.getLayout().getPlid(), PortletRequest.RENDER_PHASE);
+            redirect.setPortletMode(PortletMode.VIEW);
+            redirect.setWindowState(WindowState.NORMAL);
+            response.sendRedirect(redirect.toString());
+        } catch (Exception e) {
+            LOG.error("Redirect error", e);
         }
     }
 }

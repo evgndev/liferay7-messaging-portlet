@@ -38,6 +38,7 @@
             <%
                 for (User toUser : users) {
                     if (toUser.getUserId() == user.getUserId()) continue;
+                    if (toUser.isDefaultUser()) continue;
             %>
             <aui:option label="<%= UserCustomUtil.getUserFIO(toUser) %>"
                         value="<%= String.valueOf(toUser.getUserId()) %>"
