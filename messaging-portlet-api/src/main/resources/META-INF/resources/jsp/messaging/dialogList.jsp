@@ -29,6 +29,19 @@
             <liferay-ui:message key="messaging.createDialog"/>
         </aui:a>
     </div>
+    <style>
+        .msgCreation {
+            display: none !important;
+        }
+    </style>
+</c:if>
+<c:if test="<%= !(PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_MSG")
+        && PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_DIALOG")) %>">
+    <style>
+        .msgCreation {
+            display: block !important;
+        }
+    </style>
 </c:if>
 
 <%--Table--%>
@@ -120,8 +133,3 @@
     </liferay-ui:search-container-row>
     <liferay-ui:search-iterator searchContainer="<%= searchContainer %>"/>
 </liferay-ui:search-container>
-<style>
-    .msgCreation {
-        display: block !important;
-    }
-</style>

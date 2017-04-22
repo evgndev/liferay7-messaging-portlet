@@ -18,7 +18,7 @@
     long dialogId = ParamUtil.getLong(request, MessagingPortlet.DIALOG_ID);
     Dialog dialog = DialogLocalServiceUtil.fetchDialog(dialogId);
 
-    String receiverAvailableUserIdsStr = ParamUtil.getString(request, "availableUserIds");
+    String receiverAvailableUserIdsStr = ParamUtil.getString(request, "userIds");
 
     long userId = user.getUserId();
 

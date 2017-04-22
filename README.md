@@ -4,7 +4,7 @@
 
 CREATE_DIALOG - hide message creation on dialog list. 
 you can create dialog on message.jsp, like
-    http://localhost:8080/web/guest/messages?p_p_id=evgn_dev_messaging_portlet_MessagingPortlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_evgn_dev_messaging_portlet_MessagingPortlet_jspPage=%2Fjsp%2Fmessaging%2Fmessage.jsp&_evgn_dev_messaging_portlet_MessagingPortlet_availableUserIds=20164
+    http://localhost:8080/web/guest/messages?p_p_id=evgn_dev_messaging_portlet_MessagingPortlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_evgn_dev_messaging_portlet_MessagingPortlet_jspPage=%2Fjsp%2Fmessaging%2Fmessage.jsp&_evgn_dev_messaging_portlet_MessagingPortlet_userIds=20164
 
 CREATE_MSG - hide message creation in dialog page
 
