@@ -68,7 +68,8 @@
 </liferay-ui:search-container>
 
 <%--Create new message--%>
-<c:if test="<%= PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_MSG")%>">
+<c:if test="<%= PermissionUtil.hasPermission(scopeGroupId, portletDisplay, "CREATE_MSG")
+            && !dialog.isDisableAnswering() %>">
     <div class="align-center">
         <liferay-portlet:renderURL var="createDialogURL">
             <liferay-portlet:param name="<%= JSP %>" value="<%= MessagingPortlet.JSP_MESSAGE %>"/>
